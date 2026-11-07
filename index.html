@@ -295,6 +295,33 @@
                 description: 'Pochette de voyage isotherme pour médicaments, avec deux blocs réfrigérants. Prix constaté sur Amazon : 25,64 €, susceptible de varier.',
                 reservedBy: null,
                 priority: 'Priorité modérée'
+            },
+            {
+                id: 'livre-investissement-immobilier-locatif-intelligent',
+                title: 'L’investissement immobilier locatif intelligent — Julien Delagrandanne',
+                category: 'Livres',
+                image: 'https://covers.openlibrary.org/b/id/10480049-L.jpg',
+                url: 'https://www.amazon.fr/Linvestissement-immobilier-locatif-intelligent-Itin%C3%A9raire/dp/295421404X',
+                description: 'Langue originale : français.',
+                reservedBy: null
+            },
+            {
+                id: 'book-little-book-common-sense-investing',
+                title: 'The Little Book of Common Sense Investing — John C. Bogle',
+                category: 'Livres',
+                image: 'https://covers.openlibrary.org/b/id/1239500-L.jpg',
+                description: 'Langue originale : anglais.',
+                url: 'https://www.amazon.fr/s?k=The+Little+Book+of+Common+Sense+Investing+John+C.+Bogle',
+                reservedBy: null
+            },
+            {
+                id: 'livre-creer-piloter-portefeuille-etf',
+                title: 'Créer et piloter un portefeuille d’ETF (ou Épargnant 3.0) — Édouard Petit',
+                category: 'Livres',
+                image: 'https://covers.openlibrary.org/b/id/10710169-L.jpg',
+                description: 'Langue originale : français.',
+                url: 'https://www.amazon.fr/s?k=Cr%C3%A9er+et+piloter+un+portefeuille+d%27ETF+%C3%89douard+Petit',
+                reservedBy: null
             }
         ];
 
@@ -306,11 +333,16 @@
         } catch (error) {
             console.error('Impossible de lire la liste de cadeaux enregistrée.', error);
         }
-        let gifts = (savedGifts || []).filter(gift => !['1', '2', '3'].includes(gift.id));
+        let gifts = (savedGifts || [])
+            .filter(gift => !['1', '2', '3', 'livre-negocier-un-bien-immobilier'].includes(gift.id))
+            .map(gift => {
+                const initialGift = INITIAL_GIFTS.find(initialGift => initialGift.id === gift.id);
+                return initialGift ? { ...initialGift, ...gift } : gift;
+            });
         INITIAL_GIFTS.forEach(initialGift => {
             if (!gifts.some(gift => gift.id === initialGift.id)) gifts.push(initialGift);
         });
-        if (!savedGifts || gifts.length !== savedGifts.length) {
+        if (!savedGifts || JSON.stringify(gifts) !== JSON.stringify(savedGifts)) {
             localStorage.setItem('wishlist_items', JSON.stringify(gifts));
         }
 
@@ -357,7 +389,7 @@
                 if (!Array.isArray(importedGifts) || importedGifts.some(gift => !gift || typeof gift.id !== 'string' || typeof gift.title !== 'string')) {
                     throw new Error('Le fichier doit contenir une liste de cadeaux avec un identifiant et un titre.');
                 }
-                gifts = importedGifts.filter(gift => !['1', '2', '3'].includes(gift.id));
+                gifts = importedGifts.filter(gift => !['1', '2', '3', 'livre-negocier-un-bien-immobilier'].includes(gift.id));
                 INITIAL_GIFTS.forEach(initialGift => {
                     if (!gifts.some(gift => gift.id === initialGift.id)) gifts.push(initialGift);
                 });
