@@ -32,27 +32,98 @@
         }
     </script>
     <style>
-        .festive-theme {
-            background-color: #F8F5EE;
-            color: #165B33;
+        body.christmas-theme {
+            background-color: #f7fbf8;
+            background-image:
+                radial-gradient(ellipse at 8% 18%, rgba(220, 38, 38, 0.1), transparent 30rem),
+                radial-gradient(ellipse at 92% 38%, rgba(22, 91, 51, 0.12), transparent 34rem),
+                linear-gradient(180deg, #f8fffb 0%, #fffafa 55%, #f4faf6 100%);
+            background-attachment: fixed;
+            color: #7f1d1d;
         }
-        .festive-theme .card-bg {
-            background-color: #ffffff;
-            border: 2px solid #D42426;
+        .christmas-theme::before {
+            content: "";
+            position: fixed;
+            inset: 0 0 auto;
+            height: 8px;
+            z-index: 31;
+            pointer-events: none;
+            background: repeating-linear-gradient(
+                110deg,
+                #991b1b 0 18px,
+                #fff 18px 36px,
+                #166534 36px 54px,
+                #fff 54px 72px
+            );
+            box-shadow: 0 2px 8px rgba(69, 10, 10, 0.14);
         }
-        .festive-theme .accent-btn {
-            background-color: #D42426;
-            color: #ffffff;
+        .christmas-theme header,
+        .christmas-theme footer {
+            background-color: rgba(255, 255, 255, 0.96);
+            border-color: #fecaca;
         }
-        .festive-theme .accent-btn:hover {
-            background-color: #b01b1d;
+        .christmas-theme #app-title,
+        .christmas-theme footer {
+            color: #991b1b;
         }
-        .festive-title {
+        .christmas-theme main > .mb-8 {
+            background-image: linear-gradient(120deg, #991b1b, #dc2626 65%, #ef4444);
+            border: 2px solid #fecaca;
+        }
+        .christmas-theme .card-bg {
+            background-color: #fff;
+            border: 2px solid #fecaca;
+            box-shadow: 0 8px 24px rgba(153, 27, 27, 0.08);
+        }
+        .christmas-theme .card-bg:hover {
+            box-shadow: 0 14px 30px rgba(153, 27, 27, 0.14);
+        }
+        .christmas-theme .card-bg.is-reserved {
+            background-color: #e7e5e4;
+            border-color: #a8a29e;
+            filter: brightness(0.78) saturate(0.72);
+            box-shadow: 0 5px 16px rgba(28, 25, 23, 0.16);
+        }
+        .christmas-theme .card-bg.is-reserved:hover {
+            filter: brightness(0.84) saturate(0.76);
+        }
+        .christmas-theme .accent-btn {
+            background-color: #b91c1c;
+            color: #fff;
+        }
+        .christmas-theme .accent-btn:hover {
+            background-color: #991b1b;
+        }
+        .christmas-theme .festive-title,
+        .christmas-theme #app-title {
             font-family: 'Mountains of Christmas', cursive;
+        }
+        .snowfall {
+            position: fixed;
+            inset: -100% 0 0;
+            z-index: 40;
+            pointer-events: none;
+            opacity: 0.65;
+            background-image:
+                radial-gradient(3px 3px at 40px 60px, #fff 50%, transparent 100%),
+                radial-gradient(2px 2px at 120px 150px, #fff 50%, transparent 100%),
+                radial-gradient(4px 4px at 200px 90px, #fff 50%, transparent 100%);
+            background-size: 260px 220px;
+            animation: snowfall 12s linear infinite;
+            filter: drop-shadow(0 1px 1px rgba(127, 29, 29, 0.35));
+        }
+        @keyframes snowfall {
+            to { transform: translateY(100%); }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .snowfall {
+                animation: none;
+            }
         }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800 dark:bg-slate-900 dark:text-slate-100 transition-colors duration-300 min-h-screen flex flex-col font-sans">
+<body class="christmas-theme bg-slate-50 text-slate-800 dark:bg-slate-900 dark:text-slate-100 transition-colors duration-300 min-h-screen flex flex-col font-sans">
+    <div class="snowfall" aria-hidden="true"></div>
 
     <!-- En-tête / Navigation -->
     <header class="sticky top-0 z-30 backdrop-blur-md bg-white/80 dark:bg-slate-900/80 border-b border-slate-200 dark:border-slate-800 transition-colors duration-300">
@@ -74,16 +145,6 @@
                     <i data-lucide="sun" class="w-5 h-5 hidden dark:block"></i>
                     <i data-lucide="moon" class="w-5 h-5 block dark:hidden"></i>
                 </button>
-                <button id="festive-toggle" class="p-2.5 rounded-xl border border-red-200 bg-red-50 text-red-600 hover:bg-red-100 transition flex items-center gap-1.5 font-medium text-sm" title="Activer l'ambiance Noël">
-                    <span>🎄</span>
-                    <span class="hidden sm:inline">Thème Noël</span>
-                </button>
-
-                <!-- Bouton Ajouter / Mode Édition -->
-                <button id="open-add-modal" class="p-2.5 sm:px-4 sm:py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-medium text-sm shadow-md shadow-indigo-500/20 transition flex items-center gap-2">
-                    <i data-lucide="plus" class="w-4 h-4"></i>
-                    <span class="hidden sm:inline">Ajouter une idée</span>
-                </button>
             </div>
         </div>
     </header>
@@ -94,46 +155,13 @@
         <!-- Banner Explicatif pour la famille -->
         <div class="mb-8 p-6 rounded-2xl bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white shadow-xl relative overflow-hidden">
             <div class="relative z-10 max-w-2xl">
-                <h2 class="text-xl sm:text-2xl font-bold mb-2">Bienvenue sur ma liste d'idées ! ✨</h2>
+                <h2 class="festive-title text-xl sm:text-2xl font-bold mb-2">Bienvenue sur ma liste d'idées ! ✨</h2>
                 <p class="text-sm sm:text-base text-indigo-100 leading-relaxed">
                     Pour éviter les doublons, vous pouvez réserver directement un cadeau ci-dessous. Indiquez simplement votre prénom !
                 </p>
             </div>
             <div class="absolute -right-6 -bottom-6 opacity-10 pointer-events-none">
                 <i data-lucide="gift" class="w-64 h-64"></i>
-            </div>
-        </div>
-
-        <!-- Filtres et Recherche -->
-        <div class="mb-8 flex flex-col md:flex-row gap-4 items-center justify-between bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm">
-            <!-- Recherche par mot clé -->
-            <div class="relative w-full md:w-72">
-                <i data-lucide="search" class="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                <input type="text" id="search-input" placeholder="Rechercher une idée..." class="w-full pl-10 pr-4 py-2 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
-            </div>
-
-            <!-- Catégories & Prix -->
-            <div class="flex flex-wrap items-center gap-3 w-full md:w-auto">
-                <!-- Filtre Catégorie -->
-                <select id="category-filter" class="px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 flex-grow md:flex-grow-0">
-                    <option value="all">Toutes les catégories</option>
-                </select>
-
-                <!-- Filtre Prix -->
-                <select id="price-filter" class="px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 flex-grow md:flex-grow-0">
-                    <option value="all">Tous les prix</option>
-                    <option value="under25">Moins de 25 €</option>
-                    <option value="25to50">De 25 € à 50 €</option>
-                    <option value="50to100">De 50 € à 100 €</option>
-                    <option value="over100">Plus de 100 €</option>
-                </select>
-
-                <!-- Filtre Statut -->
-                <select id="status-filter" class="px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 flex-grow md:flex-grow-0">
-                    <option value="all">Tous les statuts</option>
-                    <option value="available">Disponibles</option>
-                    <option value="reserved">Déjà réservés</option>
-                </select>
             </div>
         </div>
 
@@ -148,7 +176,7 @@
                 <i data-lucide="package-open" class="w-12 h-12"></i>
             </div>
             <h3 class="text-lg font-semibold mb-1">Aucune idée trouvée</h3>
-            <p class="text-sm text-slate-500 dark:text-slate-400">Essayez de modifier vos filtres ou d'ajouter de nouvelles idées !</p>
+            <p class="text-sm text-slate-500 dark:text-slate-400">Les nouvelles idées apparaîtront ici.</p>
         </div>
 
     </main>
@@ -246,47 +274,48 @@
         // --- Données par défaut ---
         const INITIAL_GIFTS = [
             {
-                id: '1',
-                title: 'Livre - Le Problème à trois corps',
-                price: 11.50,
-                category: 'Lecture',
-                image: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=500&auto=format&fit=crop&q=60',
-                url: 'https://www.amazon.fr',
-                description: 'Roman de science-fiction passionnant par Liu Cixin.',
-                reservedBy: null
+                id: 'philips-defroisseur-main-3000',
+                title: 'Défroisseur à main Philips 3000 (STH3020/10)',
+                price: 44.73,
+                category: 'Maison',
+                image: 'https://m.media-amazon.com/images/I/415QWJ+NZ4L._AC_SX425_.jpg',
+                url: 'https://amzn.eu/d/09Ap63Y3',
+                description: 'Un essentiel à m’offrir — URGENT ! Prix constaté chez Amazon : 44,73 €, susceptible de varier.',
+                reservedBy: null,
+                urgent: true
             },
             {
-                id: '2',
-                title: 'Machine à Café Épresso',
-                price: 89.99,
-                category: 'Cuisine',
-                image: 'https://images.unsplash.com/photo-1517668808822-9ebb02f2a0e6?w=500&auto=format&fit=crop&q=60',
-                url: 'https://www.fnac.com',
-                description: 'Modèle compact, couleur noire de préférence.',
-                reservedBy: 'Cousin Lucas'
-            },
-            {
-                id: '3',
-                title: 'Casque Audio Sans-Fil',
-                price: 129.00,
-                category: 'Tech',
-                image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500&auto=format&fit=crop&q=60',
-                url: 'https://www.boulanger.com',
-                description: 'Réduction de bruit active si possible.',
-                reservedBy: null
+                id: 'disoncare-pochette-isotherme-insuline',
+                title: 'Pochette isotherme DISONCARE pour médicaments (verte)',
+                price: 25.64,
+                category: 'Voyage & santé',
+                image: 'https://m.media-amazon.com/images/I/71IESC1CvzL._AC_SY355_PIbundle-2,TopRight,0,0_SH20_.jpg',
+                url: 'https://amzn.eu/d/0eJxShju',
+                description: 'Pochette de voyage isotherme pour médicaments, avec deux blocs réfrigérants. Prix constaté sur Amazon : 25,64 €, susceptible de varier.',
+                reservedBy: null,
+                priority: 'Priorité modérée'
             }
         ];
 
         // --- État de l'application ---
-        let gifts = JSON.parse(localStorage.getItem('wishlist_items')) || INITIAL_GIFTS;
+        let savedGifts = null;
+        try {
+            const storedGifts = JSON.parse(localStorage.getItem('wishlist_items'));
+            if (Array.isArray(storedGifts)) savedGifts = storedGifts;
+        } catch (error) {
+            console.error('Impossible de lire la liste de cadeaux enregistrée.', error);
+        }
+        let gifts = (savedGifts || []).filter(gift => !['1', '2', '3'].includes(gift.id));
+        INITIAL_GIFTS.forEach(initialGift => {
+            if (!gifts.some(gift => gift.id === initialGift.id)) gifts.push(initialGift);
+        });
+        if (!savedGifts || gifts.length !== savedGifts.length) {
+            localStorage.setItem('wishlist_items', JSON.stringify(gifts));
+        }
 
         // --- Éléments DOM ---
         const grid = document.getElementById('gifts-grid');
         const emptyState = document.getElementById('empty-state');
-        const searchInput = document.getElementById('search-input');
-        const categoryFilter = document.getElementById('category-filter');
-        const priceFilter = document.getElementById('price-filter');
-        const statusFilter = document.getElementById('status-filter');
         const itemModal = document.getElementById('item-modal');
         const reserveModal = document.getElementById('reserve-modal');
         const itemForm = document.getElementById('item-form');
@@ -297,53 +326,62 @@
 
         function saveToStorage() {
             localStorage.setItem('wishlist_items', JSON.stringify(gifts));
-            populateCategories();
             render();
         }
 
-        function populateCategories() {
-            const categories = [...new Set(gifts.map(g => g.category).filter(Boolean))];
-            const current = categoryFilter.value;
-            categoryFilter.innerHTML = '<option value="all">Toutes les catégories</option>';
-            categories.forEach(cat => {
-                const opt = document.createElement('option');
-                opt.value = cat;
-                opt.textContent = cat;
-                categoryFilter.appendChild(opt);
-            });
-            categoryFilter.value = current;
-        }
+        const themeToggle = document.getElementById('theme-toggle');
+        const savedTheme = localStorage.getItem('wishlist_theme');
+        if (savedTheme === 'dark') document.documentElement.classList.add('dark');
+        themeToggle.addEventListener('click', () => {
+            const isDark = document.documentElement.classList.toggle('dark');
+            localStorage.setItem('wishlist_theme', isDark ? 'dark' : 'light');
+        });
+
+        document.getElementById('export-json').addEventListener('click', () => {
+            const file = new Blob([JSON.stringify(gifts, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(file);
+            const download = document.createElement('a');
+            download.href = url;
+            download.download = 'liste-de-cadeaux.json';
+            download.click();
+            URL.revokeObjectURL(url);
+        });
+
+        document.getElementById('import-json').addEventListener('change', async event => {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            try {
+                const importedGifts = JSON.parse(await file.text());
+                if (!Array.isArray(importedGifts) || importedGifts.some(gift => !gift || typeof gift.id !== 'string' || typeof gift.title !== 'string')) {
+                    throw new Error('Le fichier doit contenir une liste de cadeaux avec un identifiant et un titre.');
+                }
+                gifts = importedGifts.filter(gift => !['1', '2', '3'].includes(gift.id));
+                INITIAL_GIFTS.forEach(initialGift => {
+                    if (!gifts.some(gift => gift.id === initialGift.id)) gifts.push(initialGift);
+                });
+                saveToStorage();
+            } catch (error) {
+                console.error('Impossible d’importer cette liste de cadeaux.', error);
+                window.alert('Import impossible : choisissez un fichier JSON valide contenant une liste de cadeaux.');
+            } finally {
+                event.target.value = '';
+            }
+        });
+
+        document.getElementById('reset-default').addEventListener('click', () => {
+            gifts = INITIAL_GIFTS.map(gift => ({ ...gift }));
+            saveToStorage();
+        });
 
         // --- Rendu des cartes ---
         function render() {
-            const search = searchInput.value.toLowerCase();
-            const cat = categoryFilter.value;
-            const price = priceFilter.value;
-            const status = statusFilter.value;
-
-            const filtered = gifts.filter(gift => {
-                const matchesSearch = gift.title.toLowerCase().includes(search) || (gift.description && gift.description.toLowerCase().includes(search));
-                const matchesCat = cat === 'all' || gift.category === cat;
-                
-                let matchesPrice = true;
-                if (price === 'under25') matchesPrice = gift.price < 25;
-                else if (price === '25to50') matchesPrice = gift.price >= 25 && gift.price <= 50;
-                else if (price === '50to100') matchesPrice = gift.price > 50 && gift.price <= 100;
-                else if (price === 'over100') matchesPrice = gift.price > 100;
-
-                let matchesStatus = true;
-                if (status === 'available') matchesStatus = !gift.reservedBy;
-                else if (status === 'reserved') matchesStatus = !!gift.reservedBy;
-
-                return matchesSearch && matchesCat && matchesPrice && matchesStatus;
-            });
-
             grid.innerHTML = '';
-            if (filtered.length === 0) {
+            if (gifts.length === 0) {
                 emptyState.classList.remove('hidden');
             } else {
                 emptyState.classList.add('hidden');
-                filtered.forEach(gift => {
+                gifts.forEach(gift => {
                     grid.appendChild(createGiftCard(gift));
                 });
             }
@@ -351,57 +389,76 @@
         }
 
         function createGiftCard(gift) {
-            const card = document.createElement('div');
-            card.className = `card-bg bg-white dark:bg-slate-800 rounded-3xl border border-slate-200 dark:border-slate-700 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col relative group`;
-            
-            const isReserved = !!gift.reservedBy;
+            const card = document.createElement('article');
+            card.className = `card-bg bg-white dark:bg-slate-800 rounded-3xl border border-slate-200 dark:border-slate-700 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col${gift.reserved ? ' is-reserved' : ''}`;
 
-            card.innerHTML = `
-                <!-- Image -->
-                <div class="relative h-48 w-full bg-slate-100 dark:bg-slate-900 overflow-hidden">
-                    <img src="${gift.image || 'https://images.unsplash.com/photo-1513885045260-6b3086b24c17?w=500&auto=format&fit=crop&q=60'}" 
-                         alt="${gift.title}" 
-                         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                         onerror="this.src='https://placehold.co/600x400/e2e8f0/64748b?text=Pas+d+image'">
-                    
-                    ${gift.category ? `<span class="absolute top-3 left-3 bg-white/90 dark:bg-slate-800/90 backdrop-blur-md px-3 py-1 rounded-full text-xs font-semibold shadow-sm">${gift.category}</span>` : ''}
-                    
-                    <!-- Bouton Modifier/Supprimer (discret) -->
-                    <div class="absolute top-3 right-3 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <button onclick="editGift('${gift.id}')" class="p-1.5 bg-white/90 dark:bg-slate-800/90 rounded-full hover:text-indigo-600 shadow-sm" title="Modifier">
-                            <i data-lucide="pencil" class="w-4 h-4"></i>
-                        </button>
-                        <button onclick="deleteGift('${gift.id}')" class="p-1.5 bg-white/90 dark:bg-slate-800/90 rounded-full hover:text-red-600 shadow-sm" title="Supprimer">
-                            <i data-lucide="trash-2" class="w-4 h-4"></i>
-                        </button>
-                    </div>
-                </div>
+            const image = document.createElement('img');
+            image.src = gift.image || 'https://images.unsplash.com/photo-1513885045260-6b3086b24c17?w=500&auto=format&fit=crop&q=60';
+            image.alt = gift.title;
+            image.loading = 'lazy';
+            image.className = 'h-56 w-full object-contain bg-white p-4';
+            card.appendChild(image);
 
-                <!-- Contenu -->
-                <div class="p-5 flex-grow flex flex-col justify-between">
-                    <div>
-                        <div class="flex items-start justify-between gap-2 mb-2">
-                            <h3 class="font-bold text-lg line-clamp-1">${gift.title}</h3>
-                            ${gift.price ? `<span class="text-sm font-bold text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950/50 px-2.5 py-1 rounded-xl whitespace-nowrap">${Number(gift.price).toFixed(2)} €</span>` : ''}
-                        </div>
-                        <p class="text-xs text-slate-500 dark:text-slate-400 line-clamp-2 mb-4">${gift.description || 'Pas de description supplémentaire.'}</p>
-                    </div>
+            const content = document.createElement('div');
+            content.className = 'p-5 flex flex-grow flex-col';
 
-                    <!-- Réservation & Liens -->
-                    <div class="pt-4 border-t border-slate-100 dark:border-slate-700/50 flex flex-col gap-2">
-                        ${isReserved ? `
-                            <div class="flex items-center justify-between bg-emerald-50 dark:bg-emerald-950/30 text-emerald-700 dark:text-emerald-400 px-3 py-2 rounded-xl text-xs font-medium">
-                                <span class="flex items-center gap-1.5">
-                                    <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-500"></i>
-                                    Réservé par <strong>${gift.reservedBy}</strong>
-                                </span>
-                                <button onclick="cancelReservation('${gift.id}')" class="hover:underline text-[10px] opacity-75">Annuler</button>
-                            </div>
-                        ` : `
-                            <button onclick="openReserveModal('${gift.id}')" class="accent-btn w-full py-2.5 px-4 rounded-xl bg-slate-900 hover:bg-slate-800 dark:bg-slate-100 dark:hover:bg-white dark:text-slate-900 text-white font-medium text-xs shadow-md transition flex items-center justify-center gap-2">
-                                <i data-lucide="bookmark" class="w-4 h-4"></i>
-                                Je l'achète / Réserver
-                            </button>
-                        `}
+            if (gift.category) {
+                const category = document.createElement('span');
+                category.className = 'mb-3 self-start rounded-full bg-red-50 px-3 py-1 text-xs font-semibold text-red-800';
+                category.textContent = gift.category;
+                content.appendChild(category);
+            }
 
-                        ${gift.url ? `
+            const title = document.createElement('h3');
+            title.className = 'text-lg font-bold text-red-950';
+            title.textContent = gift.title;
+            content.appendChild(title);
+
+            if (gift.price) {
+                const price = document.createElement('p');
+                price.className = 'mt-2 text-xl font-bold text-red-700';
+                price.textContent = `${Math.round(Number(gift.price))} €`;
+                content.appendChild(price);
+            }
+
+            const description = document.createElement('p');
+            description.className = 'mt-3 flex-grow text-sm leading-relaxed text-slate-600';
+            description.textContent = gift.description || '';
+            content.appendChild(description);
+
+            if (gift.urgent || gift.priority) {
+                const urgentLabel = document.createElement('span');
+                urgentLabel.className = `mt-4 self-start rounded-full px-3 py-1.5 text-xs font-bold uppercase tracking-wide text-white ${gift.urgent ? 'bg-red-700' : 'bg-amber-600'}`;
+                urgentLabel.textContent = gift.urgent ? 'Essentiel à m’offrir · Urgent' : gift.priority;
+                content.appendChild(urgentLabel);
+            }
+
+            if (gift.url) {
+                const link = document.createElement('a');
+                link.href = gift.url;
+                link.target = '_blank';
+                link.rel = 'noopener noreferrer';
+                link.className = 'accent-btn mt-5 inline-flex items-center justify-center gap-2 rounded-xl bg-red-700 px-4 py-3 text-sm font-semibold text-white transition hover:bg-red-800';
+                link.textContent = 'Voir site commerçant';
+                content.appendChild(link);
+            }
+
+            const reserveButton = document.createElement('button');
+            reserveButton.type = 'button';
+            reserveButton.className = `mt-3 inline-flex items-center justify-center rounded-xl border px-4 py-3 text-sm font-semibold transition ${gift.reserved ? 'border-emerald-700 bg-emerald-700 text-white hover:bg-emerald-800' : 'border-red-200 bg-white text-red-800 hover:bg-red-50'}`;
+            reserveButton.textContent = gift.reserved ? 'Réservé · Annuler' : 'Réserver ce cadeau';
+            reserveButton.setAttribute('aria-pressed', String(Boolean(gift.reserved)));
+            reserveButton.addEventListener('click', () => {
+                gift.reserved = !gift.reserved;
+                saveToStorage();
+            });
+            content.appendChild(reserveButton);
+
+            card.appendChild(content);
+            return card;
+        }
+
+        render();
+    </script>
+</body>
+</html>
