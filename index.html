@@ -344,7 +344,7 @@
                 category: 'Voyage & santé',
                 image: 'https://m.media-amazon.com/images/I/71IESC1CvzL._AC_SY355_PIbundle-2,TopRight,0,0_SH20_.jpg',
                 url: 'https://amzn.eu/d/0eJxShju',
-                description: '',
+                description: 'peu importe la couleur',
                 reservedBy: null,
                 priority: 'Utile mais priorité modérée'
             },
@@ -364,6 +364,7 @@
                 title: 'The Little Book of Common Sense Investing — John C. Bogle',
                 category: 'Livres',
                 image: 'https://covers.openlibrary.org/b/id/1239500-L.jpg',
+                price: 25,
                 description: 'Oui, je veux bien la version anglaise, ce n’est pas une erreur. Vous pouvez aussi l’acheter d’occasion sur Leboncoin, ça ne me dérange pas.',
                 url: 'https://www.amazon.fr/Little-Book-Common-Sense-Investing/dp/1119404509?sr=8-1',
                 priority: 'Si tu n’as pas d’inspiration',
@@ -435,7 +436,10 @@
                     'book-mastering-market-cycle': 'Vous pouvez aussi l’acheter d’occasion sur Leboncoin, ça ne me dérange pas.',
                     'veste-randonnee-3-en-1-nh100-homme': 'Taille L'
                 };
-                if (gift.description === previousDescriptions[gift.id]) {
+                if (
+                    gift.description === previousDescriptions[gift.id]
+                    || (gift.id === 'disoncare-pochette-isotherme-insuline' && gift.description === '')
+                ) {
                     mergedGift.description = initialGift.description;
                 }
                 if (
