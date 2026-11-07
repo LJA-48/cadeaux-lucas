@@ -79,13 +79,64 @@
             box-shadow: 0 14px 30px rgba(153, 27, 27, 0.14);
         }
         .christmas-theme .card-bg.is-reserved {
-            background-color: #e7e5e4;
-            border-color: #a8a29e;
-            filter: brightness(0.78) saturate(0.72);
-            box-shadow: 0 5px 16px rgba(28, 25, 23, 0.16);
+            background-color: #e2e8f0;
+            border-color: #2563eb;
+            filter: brightness(0.88) saturate(0.72);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.16), 0 8px 22px rgba(30, 64, 175, 0.2);
         }
         .christmas-theme .card-bg.is-reserved:hover {
-            filter: brightness(0.84) saturate(0.76);
+            filter: brightness(0.92) saturate(0.78);
+        }
+        .reserved-overlay {
+            position: absolute;
+            inset: 0;
+            z-index: 2;
+            overflow: hidden;
+            pointer-events: none;
+        }
+        .reserved-badge {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 7px 12px;
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            border-radius: 9999px;
+            background: #1d4ed8;
+            color: #fff;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            box-shadow: 0 3px 12px rgba(30, 64, 175, 0.32);
+        }
+        .reserved-flake {
+            position: absolute;
+            top: -1.5rem;
+            color: #2563eb;
+            font-size: 1rem;
+            line-height: 1;
+            text-shadow: 0 1px 3px #fff;
+            animation: reserved-snowfall 3.2s linear infinite;
+        }
+        .reserved-flake:nth-of-type(2) {
+            left: 28%;
+            animation-delay: -1.1s;
+        }
+        .reserved-flake:nth-of-type(3) {
+            left: 62%;
+            animation-delay: -2.2s;
+        }
+        .reserved-flake:nth-of-type(4) {
+            left: 88%;
+            animation-delay: -0.5s;
+        }
+        @keyframes reserved-snowfall {
+            0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+            12% { opacity: 0.9; }
+            85% { opacity: 0.75; }
+            100% { transform: translateY(calc(100% + 24rem)) rotate(180deg); opacity: 0; }
         }
         .christmas-theme .accent-btn {
             background-color: #b91c1c;
@@ -117,7 +168,8 @@
             to { transform: translateY(100%); }
         }
         @media (prefers-reduced-motion: reduce) {
-            .snowfall {
+            .snowfall,
+            .reserved-flake {
                 animation: none;
             }
         }
@@ -281,7 +333,7 @@
                 category: 'Maison',
                 image: 'https://m.media-amazon.com/images/I/415QWJ+NZ4L._AC_SX425_.jpg',
                 url: 'https://amzn.eu/d/09Ap63Y3',
-                description: 'Un essentiel à m’offrir — URGENT ! Prix constaté chez Amazon : 44,73 €, susceptible de varier.',
+                description: '',
                 reservedBy: null,
                 urgent: true
             },
@@ -292,17 +344,19 @@
                 category: 'Voyage & santé',
                 image: 'https://m.media-amazon.com/images/I/71IESC1CvzL._AC_SY355_PIbundle-2,TopRight,0,0_SH20_.jpg',
                 url: 'https://amzn.eu/d/0eJxShju',
-                description: 'Pochette de voyage isotherme pour médicaments, avec deux blocs réfrigérants. Prix constaté sur Amazon : 25,64 €, susceptible de varier.',
+                description: '',
                 reservedBy: null,
-                priority: 'Priorité modérée'
+                priority: 'Utile mais priorité modérée'
             },
             {
                 id: 'livre-investissement-immobilier-locatif-intelligent',
                 title: 'L’investissement immobilier locatif intelligent — Julien Delagrandanne',
                 category: 'Livres',
                 image: 'https://covers.openlibrary.org/b/id/10480049-L.jpg',
+                price: 25,
                 url: 'https://www.amazon.fr/Linvestissement-immobilier-locatif-intelligent-Itin%C3%A9raire/dp/295421404X',
-                description: 'Langue originale : français.',
+                description: 'Vous pouvez aussi l’acheter d’occasion sur Leboncoin, ça ne me dérange pas.',
+                priority: 'Si tu n’as pas d’inspiration',
                 reservedBy: null
             },
             {
@@ -310,8 +364,9 @@
                 title: 'The Little Book of Common Sense Investing — John C. Bogle',
                 category: 'Livres',
                 image: 'https://covers.openlibrary.org/b/id/1239500-L.jpg',
-                description: 'Langue originale : anglais.',
-                url: 'https://www.amazon.fr/s?k=The+Little+Book+of+Common+Sense+Investing+John+C.+Bogle',
+                description: 'Oui, je veux bien la version anglaise, ce n’est pas une erreur. Vous pouvez aussi l’acheter d’occasion sur Leboncoin, ça ne me dérange pas.',
+                url: 'https://www.amazon.fr/Little-Book-Common-Sense-Investing/dp/1119404509?sr=8-1',
+                priority: 'Si tu n’as pas d’inspiration',
                 reservedBy: null
             },
             {
@@ -319,8 +374,39 @@
                 title: 'Créer et piloter un portefeuille d’ETF (ou Épargnant 3.0) — Édouard Petit',
                 category: 'Livres',
                 image: 'https://covers.openlibrary.org/b/id/10710169-L.jpg',
-                description: 'Langue originale : français.',
-                url: 'https://www.amazon.fr/s?k=Cr%C3%A9er+et+piloter+un+portefeuille+d%27ETF+%C3%89douard+Petit',
+                price: 25,
+                description: 'Vous pouvez aussi l’acheter d’occasion sur Leboncoin, ça ne me dérange pas.',
+                url: 'https://www.amazon.fr/Cr%C3%A9er-piloter-Portefeuille-Edouard-Petit/dp/1975769821',
+                priority: 'Si tu n’as pas d’inspiration',
+                reservedBy: null
+            },
+            {
+                id: 'book-mastering-market-cycle',
+                title: 'Mastering The Market Cycle — Howard Marks',
+                category: 'Livres',
+                image: 'https://covers.openlibrary.org/b/id/10221762-L.jpg',
+                description: 'Oui, je veux bien la version anglaise, ce n’est pas une erreur. Vous pouvez aussi l’acheter d’occasion sur Leboncoin, ça ne me dérange pas.',
+                url: 'https://www.amazon.fr/s?k=Mastering+The+Market+Cycle+Howard+Marks',
+                priority: 'Si tu n’as pas d’inspiration',
+                reservedBy: null
+            },
+            {
+                id: 'sac-randonnee-ventile-mh500-25l',
+                title: 'Sac à dos de randonnée ventilé 25 L MH500 — bleu',
+                category: 'Randonnée',
+                image: 'assets/sac-randonnee-mh500-25l.png',
+                price: 50,
+                url: 'https://www.decathlon.fr/p/sac-a-dos-de-randonnee-ventile-25l-mh500-bleu/353060/c188m8916234',
+                reservedBy: null
+            },
+            {
+                id: 'veste-randonnee-3-en-1-nh100-homme',
+                title: 'Veste 3-en-1 de randonnée imperméable 0 °C NH100 — homme, gris',
+                category: 'Randonnée',
+                image: 'assets/veste-randonnee-nh100.png',
+                description: 'Je fais du L',
+                price: 56,
+                url: 'https://www.decathlon.fr/p/veste-3en1-de-randonnee-0degc-impermeable-homme-nh100-gris/324152/c71c382m8580026',
                 reservedBy: null
             }
         ];
@@ -334,10 +420,43 @@
             console.error('Impossible de lire la liste de cadeaux enregistrée.', error);
         }
         let gifts = (savedGifts || [])
-            .filter(gift => !['1', '2', '3', 'livre-negocier-un-bien-immobilier'].includes(gift.id))
+            .filter(gift => !['1', '2', '3', 'livre-negocier-un-bien-immobilier', 'livre-promenade-hasard-bourse'].includes(gift.id))
             .map(gift => {
                 const initialGift = INITIAL_GIFTS.find(initialGift => initialGift.id === gift.id);
-                return initialGift ? { ...initialGift, ...gift } : gift;
+                if (!initialGift) return gift;
+
+                const mergedGift = { ...initialGift, ...gift };
+                const previousDescriptions = {
+                    'philips-defroisseur-main-3000': 'Un essentiel à m’offrir — URGENT ! Prix constaté chez Amazon : 44,73 €, susceptible de varier.',
+                    'disoncare-pochette-isotherme-insuline': 'Pochette de voyage isotherme pour médicaments, avec deux blocs réfrigérants. Prix constaté sur Amazon : 25,64 €, susceptible de varier.',
+                    'livre-investissement-immobilier-locatif-intelligent': 'Langue originale : français.',
+                    'book-little-book-common-sense-investing': 'Langue originale : anglais.',
+                    'livre-creer-piloter-portefeuille-etf': 'Langue originale : français.',
+                    'book-mastering-market-cycle': 'Vous pouvez aussi l’acheter d’occasion sur Leboncoin, ça ne me dérange pas.',
+                    'veste-randonnee-3-en-1-nh100-homme': 'Taille L'
+                };
+                if (gift.description === previousDescriptions[gift.id]) {
+                    mergedGift.description = initialGift.description;
+                }
+                if (
+                    gift.id === 'disoncare-pochette-isotherme-insuline'
+                    && gift.priority === 'Priorité modérée'
+                ) {
+                    mergedGift.priority = initialGift.priority;
+                }
+                if (
+                    gift.id === 'book-little-book-common-sense-investing'
+                    && gift.url === 'https://www.amazon.fr/s?k=The+Little+Book+of+Common+Sense+Investing+John+C.+Bogle'
+                ) {
+                    mergedGift.url = initialGift.url;
+                }
+                if (
+                    gift.id === 'livre-creer-piloter-portefeuille-etf'
+                    && gift.url === 'https://www.amazon.fr/s?k=Cr%C3%A9er+et+piloter+un+portefeuille+d%27ETF+%C3%89douard+Petit'
+                ) {
+                    mergedGift.url = initialGift.url;
+                }
+                return mergedGift;
             });
         INITIAL_GIFTS.forEach(initialGift => {
             if (!gifts.some(gift => gift.id === initialGift.id)) gifts.push(initialGift);
@@ -389,7 +508,7 @@
                 if (!Array.isArray(importedGifts) || importedGifts.some(gift => !gift || typeof gift.id !== 'string' || typeof gift.title !== 'string')) {
                     throw new Error('Le fichier doit contenir une liste de cadeaux avec un identifiant et un titre.');
                 }
-                gifts = importedGifts.filter(gift => !['1', '2', '3', 'livre-negocier-un-bien-immobilier'].includes(gift.id));
+                gifts = importedGifts.filter(gift => !['1', '2', '3', 'livre-negocier-un-bien-immobilier', 'livre-promenade-hasard-bourse'].includes(gift.id));
                 INITIAL_GIFTS.forEach(initialGift => {
                     if (!gifts.some(gift => gift.id === initialGift.id)) gifts.push(initialGift);
                 });
@@ -423,7 +542,29 @@
 
         function createGiftCard(gift) {
             const card = document.createElement('article');
-            card.className = `card-bg bg-white dark:bg-slate-800 rounded-3xl border border-slate-200 dark:border-slate-700 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col${gift.reserved ? ' is-reserved' : ''}`;
+            card.className = `card-bg relative bg-white dark:bg-slate-800 rounded-3xl border border-slate-200 dark:border-slate-700 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col${gift.reserved ? ' is-reserved' : ''}`;
+
+            if (gift.reserved) {
+                const reservedOverlay = document.createElement('div');
+                reservedOverlay.className = 'reserved-overlay';
+                reservedOverlay.setAttribute('role', 'status');
+                reservedOverlay.setAttribute('aria-label', 'Cadeau réservé');
+
+                const reservedBadge = document.createElement('span');
+                reservedBadge.className = 'reserved-badge';
+                reservedBadge.textContent = 'Réservé';
+                reservedOverlay.appendChild(reservedBadge);
+
+                for (let index = 0; index < 3; index += 1) {
+                    const snowflake = document.createElement('span');
+                    snowflake.className = 'reserved-flake';
+                    snowflake.setAttribute('aria-hidden', 'true');
+                    snowflake.textContent = '❄';
+                    reservedOverlay.appendChild(snowflake);
+                }
+
+                card.appendChild(reservedOverlay);
+            }
 
             const image = document.createElement('img');
             image.src = gift.image || 'https://images.unsplash.com/photo-1513885045260-6b3086b24c17?w=500&auto=format&fit=crop&q=60';
