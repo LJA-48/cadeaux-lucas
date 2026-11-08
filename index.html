@@ -431,6 +431,12 @@
 
                 const mergedGift = { ...initialGift, ...gift };
                 if (
+                    ['sac-randonnee-ventile-mh500-25l', 'veste-randonnee-3-en-1-nh100-homme'].includes(gift.id)
+                    && !gift.priority
+                ) {
+                    mergedGift.priority = initialGift.priority;
+                }
+                if (
                     gift.id === 'disoncare-pochette-isotherme-insuline'
                     && gift.title === 'Pochette isotherme DISONCARE pour médicaments (verte)'
                 ) {
