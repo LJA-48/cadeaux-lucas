@@ -339,7 +339,7 @@
             },
             {
                 id: 'disoncare-pochette-isotherme-insuline',
-                title: 'Pochette isotherme DISONCARE pour médicaments (verte)',
+                title: 'Pochette isotherme DISONCARE pour médicaments',
                 price: 25.64,
                 category: 'Voyage & santé',
                 image: 'https://m.media-amazon.com/images/I/71IESC1CvzL._AC_SY355_PIbundle-2,TopRight,0,0_SH20_.jpg',
@@ -428,6 +428,12 @@
                 if (!initialGift) return gift;
 
                 const mergedGift = { ...initialGift, ...gift };
+                if (
+                    gift.id === 'disoncare-pochette-isotherme-insuline'
+                    && gift.title === 'Pochette isotherme DISONCARE pour médicaments (verte)'
+                ) {
+                    mergedGift.title = initialGift.title;
+                }
                 const previousDescriptions = {
                     'philips-defroisseur-main-3000': 'Un essentiel à m’offrir — URGENT ! Prix constaté chez Amazon : 44,73 €, susceptible de varier.',
                     'disoncare-pochette-isotherme-insuline': 'Pochette de voyage isotherme pour médicaments, avec deux blocs réfrigérants. Prix constaté sur Amazon : 25,64 €, susceptible de varier.',
