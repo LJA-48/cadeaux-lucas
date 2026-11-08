@@ -191,14 +191,6 @@
                 </div>
             </div>
 
-            <!-- Actions du Header -->
-            <div class="flex items-center gap-2">
-                <!-- Thème Switcher -->
-                <button id="theme-toggle" class="p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition" title="Changer le thème">
-                    <i data-lucide="sun" class="w-5 h-5 hidden dark:block"></i>
-                    <i data-lucide="moon" class="w-5 h-5 block dark:hidden"></i>
-                </button>
-            </div>
         </div>
     </header>
 
@@ -412,6 +404,15 @@
                 url: 'https://www.decathlon.fr/p/veste-3en1-de-randonnee-0degc-impermeable-homme-nh100-gris/324152/c71c382m8580026',
                 priority: 'Utile mais priorité modérée',
                 reservedBy: null
+            },
+            {
+                id: 'logitech-trackball-ergonomique-multi-dispositifs',
+                title: 'Logitech MX Vertical Souris Ergonomique sans Fil',
+                category: 'Informatique',
+                image: 'assets/logitech-mx-vertical.jpg',
+                price: 60,
+                url: 'https://www.amazon.fr/Logitech-Ergonomique-Multi-Dispositifs-Bluetooth-R%C3%A9cepteur/dp/B07FNHV4MW',
+                reservedBy: null
             }
         ];
 
@@ -439,6 +440,12 @@
                 if (
                     gift.id === 'disoncare-pochette-isotherme-insuline'
                     && gift.title === 'Pochette isotherme DISONCARE pour médicaments (verte)'
+                ) {
+                    mergedGift.title = initialGift.title;
+                }
+                if (
+                    gift.id === 'logitech-trackball-ergonomique-multi-dispositifs'
+                    && gift.title === 'Trackball ergonomique Logitech multi-appareils'
                 ) {
                     mergedGift.title = initialGift.title;
                 }
@@ -499,14 +506,6 @@
             localStorage.setItem('wishlist_items', JSON.stringify(gifts));
             render();
         }
-
-        const themeToggle = document.getElementById('theme-toggle');
-        const savedTheme = localStorage.getItem('wishlist_theme');
-        if (savedTheme === 'dark') document.documentElement.classList.add('dark');
-        themeToggle.addEventListener('click', () => {
-            const isDark = document.documentElement.classList.toggle('dark');
-            localStorage.setItem('wishlist_theme', isDark ? 'dark' : 'light');
-        });
 
         document.getElementById('export-json').addEventListener('click', () => {
             const file = new Blob([JSON.stringify(gifts, null, 2)], { type: 'application/json' });
