@@ -412,6 +412,7 @@
                 image: 'assets/logitech-mx-vertical.jpg',
                 price: 60,
                 url: 'https://www.amazon.fr/Logitech-Ergonomique-Multi-Dispositifs-Bluetooth-R%C3%A9cepteur/dp/B07FNHV4MW',
+                priority: 'ça me ferai bien plaisir',
                 reservedBy: null
             }
         ];
@@ -433,6 +434,12 @@
                 const mergedGift = { ...initialGift, ...gift };
                 if (
                     ['sac-randonnee-ventile-mh500-25l', 'veste-randonnee-3-en-1-nh100-homme'].includes(gift.id)
+                    && !gift.priority
+                ) {
+                    mergedGift.priority = initialGift.priority;
+                }
+                if (
+                    gift.id === 'logitech-trackball-ergonomique-multi-dispositifs'
                     && !gift.priority
                 ) {
                     mergedGift.priority = initialGift.priority;
@@ -551,7 +558,9 @@
                 emptyState.classList.remove('hidden');
             } else {
                 emptyState.classList.add('hidden');
-                gifts.forEach(gift => {
+                [...gifts]
+                    .sort((a, b) => Number(a.category === 'Livres') - Number(b.category === 'Livres'))
+                    .forEach(gift => {
                     grid.appendChild(createGiftCard(gift));
                 });
             }
