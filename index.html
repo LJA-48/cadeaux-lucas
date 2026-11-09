@@ -331,6 +331,16 @@
                 urgent: true
             },
             {
+                id: 'verre-trempe-google-pixel-8-pro',
+                title: 'Verre trempé pour Google Pixel 8 Pro — lot de 3',
+                price: 8,
+                category: 'Maison',
+                image: 'assets/verre-trempe-pixel-8-pro.png',
+                url: 'https://www.amazon.fr/dp/B0CL6L9DV1/?coliid=I2LTB6RXCAF7YP&colid=RT5FYG2LBBB7',
+                reservedBy: null,
+                urgent: true
+            },
+            {
                 id: 'disoncare-pochette-isotherme-insuline',
                 title: 'Pochette isotherme DISONCARE pour médicaments',
                 price: 25.64,
@@ -559,9 +569,15 @@
                 emptyState.classList.remove('hidden');
             } else {
                 emptyState.classList.add('hidden');
-                [...gifts]
-                    .sort((a, b) => Number(a.category === 'Livres') - Number(b.category === 'Livres'))
-                    .forEach(gift => {
+                const displayGifts = [...gifts]
+                    .sort((a, b) => Number(a.category === 'Livres') - Number(b.category === 'Livres'));
+                const protectorIndex = displayGifts.findIndex(gift => gift.id === 'verre-trempe-google-pixel-8-pro');
+                if (protectorIndex !== -1) {
+                    const [protector] = displayGifts.splice(protectorIndex, 1);
+                    const steamerIndex = displayGifts.findIndex(gift => gift.id === 'philips-defroisseur-main-3000');
+                    displayGifts.splice(steamerIndex === -1 ? 0 : steamerIndex + 1, 0, protector);
+                }
+                displayGifts.forEach(gift => {
                     grid.appendChild(createGiftCard(gift));
                 });
             }
